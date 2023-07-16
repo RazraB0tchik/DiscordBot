@@ -1,6 +1,6 @@
-package com.bot.discordbot.Configs;
+package com.bot.discordbot.configs;
 
-import com.bot.discordbot.Listeners.CommandsListener;
+import com.bot.discordbot.listeners.CommandsListener;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -26,8 +26,10 @@ public class BotConfigs {
         jda=JDABuilder.createDefault(token).addEventListeners(commandsListener).build();
         jda.updateCommands().addCommands(
                 Commands.slash("play", "This command can start playing you music!")
-                        .addOption(OptionType.STRING, "trek_name", "Music name", true, true)
-        );
+                        .addOption(OptionType.STRING, "trek_name", "Music name", true, true),
+                Commands.slash("auth", "This command can authorize you in VK")
+        ).queue();
+
     }
 
 

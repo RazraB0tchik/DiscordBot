@@ -1,4 +1,4 @@
-package com.bot.discordbot.Listeners.Tools;
+package com.bot.discordbot.listeners.tools;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

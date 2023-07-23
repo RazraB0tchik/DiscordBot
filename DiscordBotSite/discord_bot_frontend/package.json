@@ -10,7 +10,9 @@
     "type-check": "vue-tsc --noEmit -p tsconfig.app.json --composite false"
   },
   "dependencies": {
+    "@stomp/stompjs": "^7.0.0",
     "axios": "^1.4.0",
+    "sockjs-client": "^1.6.1",
     "vue": "^3.3.4",
     "vue-router": "^4.2.2"
   },

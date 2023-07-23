@@ -1,22 +1,21 @@
 package com.bot.discordbot.controllers;
 
 import com.bot.discordbot.dto.UserDiscordBot;
+import net.dv8tion.jda.api.utils.SessionController;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.handler.annotation.SendTo;
 import org.springframework.stereotype.Component;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.util.HtmlUtils;
 
-@Component
-@RestController
+@Controller
 public class WebSiteController{
-        @GetMapping(value = "/getUserId")
-        public void getUserId(@RequestParam UserDiscordBot userDiscordBot){
-            System.out.println(userDiscordBot.getUserId());
-        }
 
-        @GetMapping(value = "/getText")
-        public void getText(){
-            System.out.println("asdas");
-        }
+    @MessageMapping("/hello")
+    public void helloWorld(@RequestBody UserDiscordBot userDiscordBot){
+        System.out.println(userDiscordBot.getUserId());
+    }
+
 }

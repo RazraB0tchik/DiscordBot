@@ -1,24 +1,26 @@
 <script>
+import stomp_connection from "@/tools/stomp_connection";
 import axios from "axios";
 export default {
+  computed: {
+    stomp_connection() {
+      return stomp_connection
+    }
+  },
   data(){
     return{
       userId: ""
     }
   },
-  updated() {
-    this.getParams();
-  },
+  // updated() {
+  //   this.getParams();
+  //   console.log(this.userId + " :update")
+  // },
+
   methods: {
-    getParams(){
+    send_userId(){
       this.userId = this.$route.query.code;
-    },
-    async sendRequest(){
-      axios.get("http://localhost:8000/user/getUserId", {
-        "userId": this.userId
-      })
-          .then(response => {console.log(response + "ok")})
-          .catch(e => console.log(e))
+      stomp_connection.methods.send_message(this.userId)
     }
   }
 }
@@ -27,7 +29,7 @@ export default {
 <template>
 <div style="width: 500px; height: 500px; background-color: aqua">
   Success, you authorize!
-  <button v-on:click="this.sendRequest()">Click</button>
+  <button v-on:click=send_userId()>Click</button>
 </div>
 </template>
 

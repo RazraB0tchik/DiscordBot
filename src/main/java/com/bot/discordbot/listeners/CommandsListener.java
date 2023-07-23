@@ -36,6 +36,7 @@ public class CommandsListener extends ListenerAdapter {
     public void onSlashCommandInteraction(SlashCommandInteractionEvent event) {
         Method method = commandsMap.get(event.getName());
         if(!method.getName().isEmpty()){
+            method.setAccessible(true);
             method.invoke(commandsList, event);
         }
     }

@@ -27,7 +27,7 @@ public class BotConfigs {
         jda.updateCommands().addCommands(
                 Commands.slash("play", "This command can start playing you music!")
                         .addOption(OptionType.STRING, "trek_name", "Music name", true, true),
-                Commands.slash("auth", "This command can authorize you in VK")
+                Commands.slash("auth", "This command can authorize you in YouTube")
         ).queue();
 
     }

@@ -5,6 +5,8 @@ import net.dv8tion.jda.api.interactions.components.buttons.Button;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import static com.bot.discordbot.configs.YouTubeConfigs.authUrl;
+
 @Component
 public class CommandsList {
 
@@ -26,8 +28,9 @@ public class CommandsList {
         event.deferReply().queue();
         event.getHook().editOriginal("Нажмите на кнопку, чтобы авторизоваться!")
                 .setActionRow(
-                    Button.link("https://oauth.vk.com/authorize?client_id=51699869&redirect_uri=http://localhost:5173/authorize&scope=3&display=page", "Авторизоваться через VK!")
+                    Button.link(authUrl, "Авторизоваться через YouTube!")
                 ).queue();
+
     }
 }
 

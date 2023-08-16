@@ -26,6 +26,7 @@ public class CommandsList {
     @Commands(name = "auth")
     public void auth(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
+        System.out.println(event.getUser().getId());
         event.getHook().editOriginal("Нажмите на кнопку, чтобы авторизоваться!")
                 .setActionRow(
                     Button.link(authUrl, "Авторизоваться через YouTube!")

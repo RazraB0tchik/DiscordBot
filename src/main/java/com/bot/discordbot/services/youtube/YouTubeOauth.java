@@ -13,43 +13,34 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
 
 import static com.bot.discordbot.configs.YouTubeConfigs.secret;
 
 @Service
 public class YouTubeOauth {
 
-    private String authJson;
+    private String authParams;
 
-    private StringBuilder tokens;
-
+    private String updateParams;
+    private StringBuilder tokens = new StringBuilder();
 
     public void generateTokens(String code){
 
-        System.out.println(code);
+        authParams = "code="+code+"&client_id="+secret.getClient_id()+"&client_secret="+secret.getClient_secret()+
+                "&redirect_uri="+secret.getRedirect_uris().get(0)+"&grant_type=authorization_code";
 
-//            authJson = "{\"code\"= \"" + code + "\"," + "\"client_id=\" \"" + secret.getClient_id() + "\","
-//                    + "\"client_secret=\" \"" + secret.getClient_secret() + "\"," + "\"redirect_uri=\"" +
-//                    secret.getRedirect_uris().get(0) + "\"," + "\"grant_type=\""+ "\"authorization_code\"";
-
-        authJson = "code="+code+"&"+"client_id="+secret.getClient_id()+"&"+"client_secret="+secret.getClient_secret()+"&"+
-                "redirect_uri="+secret.getRedirect_uris()+"&"+"grant_type=authorization_code";
-
-        System.out.println(authJson);
+        byte[] bytes = authParams.getBytes();
 
         try {
-            URL authUrl = new URL("https://oauth2.googleapis.com/token HTTP/1.1");
+            URL authUrl = new URL("https://oauth2.googleapis.com/token");
             HttpURLConnection httpURLConnection = (HttpURLConnection) authUrl.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Host", "www.googleapis.com");
             httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
             httpURLConnection.setDoOutput(true);
-
-
-            byte[] bytes = authJson.getBytes();
-            httpURLConnection.getOutputStream().write(bytes, 0, bytes.length);
+            httpURLConnection.getOutputStream().write(bytes);
             httpURLConnection.connect();
-          //  objectMapper.writeValue(new File("src/main/resources/code.json"), authJson);
 
 
             if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
@@ -69,36 +60,5 @@ public class YouTubeOauth {
 
     }
 
-//    public void authUser(){
-//        try {
-//            URL url = new URL(urlSt);
-//
-//            System.out.println(url);
-//
-//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-//            connection.setRequestMethod("GET");
-//            connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-//            int response = connection.getResponseCode();
-//
-//            System.out.println("Response code: " + response);
-//
-//            if(response == HttpURLConnection.HTTP_OK){
-//                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(connection.getInputStream())); //читает данные из открытого соединения
-//                String inputLine;
-//                StringBuilder stringBuilder = new StringBuilder();
-//
-//                while ((inputLine = bufferedReader.readLine()) != null){
-//                    stringBuilder.append(inputLine);
-//                }
-//
-//                System.out.println(stringBuilder);
-//            }
-//
-//
-//        } catch (MalformedURLException e) {
-//            throw new RuntimeException(e);
-//        } catch (IOException e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
+
 }

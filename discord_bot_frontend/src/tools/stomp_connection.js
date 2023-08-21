@@ -23,6 +23,17 @@ export default {
           this.client_connected.connect({}, frame => {
               alert("Connected + frame")
           })
+          // this.client_connected = new WebSocket("ws://localhost:7500/music_bot")
+          // this.client_connected.onopen = function (){
+          //     console.log("success")
+          //     console.log(event)
+          // }
+          // this.client_connected.onmessage = function (){
+          //   console.log(event)
+          // }
+          // this.client_connected.onerror = function (){
+          //     console.log(event)
+          // }
       },
 
       send_message: function (message){

@@ -34,6 +34,7 @@ public class YouTubeConfigs {
                     "state=state_parameter_passthrough_value&" +
                     "redirect_uri=" + secret.getRedirect_uris().get(0) + "&" +
                     "response_type=code&" +
+                    "prompt=select_account&" +
                     "client_id="+ secret.getClient_id();
 
         } catch (IOException e) {

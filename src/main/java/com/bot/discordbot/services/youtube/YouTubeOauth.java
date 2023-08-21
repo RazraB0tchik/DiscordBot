@@ -14,6 +14,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.*;
 
 import static com.bot.discordbot.configs.YouTubeConfigs.secret;
 
@@ -24,6 +25,7 @@ public class YouTubeOauth {
 
     private String updateParams;
     private StringBuilder tokens = new StringBuilder();
+
 
     public void generateTokens(String code){
 
@@ -45,9 +47,10 @@ public class YouTubeOauth {
 
             if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-                while (bufferedReader.read() != -1){
+                while (bufferedReader.read() != -1) {
                     tokens.append(bufferedReader.readLine());
                 }
+                System.out.println(tokens);
                 bufferedReader.close();
             }
             else{

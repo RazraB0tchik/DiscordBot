@@ -1,10 +1,8 @@
 package com.bot.discordbot.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Entity
@@ -21,4 +19,15 @@ public class User {
     private Long userDiscordId;
     @Column(name = "refresh_token")
     private String refreshToken;
+    @Column(name = "role")
+    private String role;
+    @Column(name = "active")
+    private Boolean active;
+
+    public User(Long userDiscordId, String refreshToken, String role, Boolean active) {
+        this.userDiscordId = userDiscordId;
+        this.refreshToken = refreshToken;
+        this.role = role;
+        this.active = active;
+    }
 }

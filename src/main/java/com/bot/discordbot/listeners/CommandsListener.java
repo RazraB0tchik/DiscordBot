@@ -4,7 +4,6 @@ import com.bot.discordbot.listeners.tools.Commands;
 import com.bot.discordbot.listeners.tools.CommandsList;
 import lombok.SneakyThrows;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
-import net.dv8tion.jda.api.events.interaction.component.ButtonInteractionEvent;
 import net.dv8tion.jda.api.hooks.ListenerAdapter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

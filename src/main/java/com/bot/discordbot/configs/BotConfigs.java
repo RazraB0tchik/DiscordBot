@@ -19,7 +19,7 @@ public class BotConfigs {
     @Value("${discord.bot.token}")
     private String token;
 
-    public JDA jda;
+    public static JDA jda;
 
     @Bean
     public void createJDA() {

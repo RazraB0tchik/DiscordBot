@@ -1,33 +1,28 @@
 package com.bot.discordbot.services.youtube;
 
-import com.bot.discordbot.configs.YouTubeConfigs;
-import com.bot.discordbot.dto.YouTbConfigsDTO;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.bot.discordbot.errors.BadAuthCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 import static com.bot.discordbot.configs.YouTubeConfigs.secret;
 
 @Service
-public class YouTubeOauth {
-
+public class YouTubeOauthTokens {
     private String authParams;
-
     private String updateParams;
     private StringBuilder tokens = new StringBuilder();
 
+    @Autowired
+    YouTubeOathProvider youTubeOathProvider;
 
-    public void generateTokens(String code){
+    public void generateAllTokens(String code){
 
         authParams = "code="+code+"&client_id="+secret.getClient_id()+"&client_secret="+secret.getClient_secret()+
                 "&redirect_uri="+secret.getRedirect_uris().get(0)+"&grant_type=authorization_code";
@@ -50,18 +45,27 @@ public class YouTubeOauth {
                 while (bufferedReader.read() != -1) {
                     tokens.append(bufferedReader.readLine());
                 }
-                System.out.println(tokens);
                 bufferedReader.close();
+
+                Map<String, String> authResult = new HashMap<>();
+                for(String elem: tokens.toString().split(",")){
+                    String[] elemMap = elem.split(":");
+                    authResult.put(elemMap[0].replaceAll("\"", "").trim(), elemMap[1].replaceAll("\"", "").trim());
+                }
+                youTubeOathProvider.createNewUser(authResult);
             }
             else{
-                System.out.println(httpURLConnection.getResponseCode());
+                throw new BadAuthCode("Bad auth code, response from google having status: " + httpURLConnection.getResponseCode());
             }
 
-        } catch (IOException e) {
+        } catch (IOException | BadAuthCode e) {
             throw new RuntimeException(e);
         }
 
     }
 
+    public void updateAccessToken(){
+
+    }
 
 }

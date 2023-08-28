@@ -25,8 +25,8 @@ bin/
 out/
 !**/src/main/**/out/
 !**/src/test/**/out/
-src/main/resources/client_secret.json
-
+src/main/resources/client_secret_youtube.json
+src/main/resources/client_secret_discord.json
 ### NetBeans ###
 /nbproject/private/
 /nbbuild/

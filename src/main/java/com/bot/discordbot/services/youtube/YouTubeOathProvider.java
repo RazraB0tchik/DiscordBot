@@ -1,9 +1,11 @@
 package com.bot.discordbot.services.youtube;
 
+import com.bot.discordbot.controllers.MainWebSocketController;
 import com.bot.discordbot.listeners.tools.CommandsList;
-import com.bot.discordbot.repositories.UserRepository;
-import org.apache.tomcat.util.descriptor.web.ContextHandler;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
+//import Spring Session!
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -17,15 +19,16 @@ public class YouTubeOathProvider {
     @Autowired
     UserService userService;
 
-    public void createNewUser(Map<String, String> tokens){
-        userService.saveNewUser(CommandsList.discordId, tokens.get("refresh_token"));
-        UserDetails userDetails = userService.loadUserByUsername(CommandsList.discordId);
-        Authentication authenticationUser = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
-        SecurityContextHolder.getContext().setAuthentication(authenticationUser);
+    @Autowired
+    HttpServletRequest httpServletRequest;
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication.getPrincipal().toString());
-    }
+//    public void createNewUser(Map<String, String> tokens){
+//        userService.saveNewUser(CommandsList.discordId, tokens.get("refresh_token"));
+//        UserDetails userDetails = userService.loadUserByUsername(CommandsList.discordId);
+//        Authentication authenticationUser = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
+//        SecurityContextHolder.getContext().setAuthentication(authenticationUser);
+//
+//    }
 
     public void checkUserOnActive(){
 

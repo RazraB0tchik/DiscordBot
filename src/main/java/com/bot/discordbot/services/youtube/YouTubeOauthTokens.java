@@ -52,7 +52,7 @@ public class YouTubeOauthTokens {
                     String[] elemMap = elem.split(":");
                     authResult.put(elemMap[0].replaceAll("\"", "").trim(), elemMap[1].replaceAll("\"", "").trim());
                 }
-                youTubeOathProvider.createNewUser(authResult);
+//                youTubeOathProvider.createNewUser(authResult);
             }
             else{
                 throw new BadAuthCode("Bad auth code, response from google having status: " + httpURLConnection.getResponseCode());

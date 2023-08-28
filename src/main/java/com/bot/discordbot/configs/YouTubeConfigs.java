@@ -19,7 +19,7 @@ public class YouTubeConfigs {
     @Bean
     public void initConfigs(){
         ObjectMapper objectMapper = new ObjectMapper();
-        URL configJSON = YouTubeConfigs.class.getResource("/client_secret.json");
+        URL configJSON = YouTubeConfigs.class.getResource("/client_secret_youtube.json");
         System.out.println(configJSON);
         try {
 

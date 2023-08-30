@@ -1,10 +1,12 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Main from "../components/MainPage.vue"
-import Finish from "../components/FinishAuthPage.vue"
+import FinishYoutube from "../components/FinishAuthPageYoutube.vue"
+import FinishDiscord from "../components/FinishAuthPageDiscord.vue"
 
 const routes = [
     {path: "/", component: Main, name: "Main"},
-    {path: "/authorize", component: Finish, name: "Auth"}
+    {path: "/authorize_youtube", component: FinishYoutube, name: "AuthYoutube"},
+    {path: "/authorize_discord", component: FinishDiscord, name: "AuthDiscord"}
 ]
 
 const router = createRouter({history: createWebHistory(), routes});

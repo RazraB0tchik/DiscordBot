@@ -2,13 +2,7 @@ package com.bot.discordbot.listeners.tools;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.components.buttons.Button;
-import net.dv8tion.jda.api.interactions.components.buttons.ButtonStyle;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
-
-import static com.bot.discordbot.configs.YouTubeConfigs.authUrl;
 
 @Service
 public class CommandsList {

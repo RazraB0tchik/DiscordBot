@@ -15,18 +15,25 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private Integer id;
+
     @Column(name = "discord_id")
     private Long userDiscordId;
-    @Column(name = "refresh_token")
-    private String refreshToken;
+
+    @Column(name = "refresh_token_youtube")
+    private String refreshTokenYouTube;
+
+    @Column(name = "refresh_token_discord")
+    private String refreshTokenDiscord;
+
     @Column(name = "role")
     private String role;
+
     @Column(name = "active")
     private Boolean active;
 
-    public User(Long userDiscordId, String refreshToken, String role, Boolean active) {
+    public User(Long userDiscordId,  String refreshTokenDiscord, String role, Boolean active) {
         this.userDiscordId = userDiscordId;
-        this.refreshToken = refreshToken;
+        this.refreshTokenDiscord = refreshTokenDiscord;
         this.role = role;
         this.active = active;
     }

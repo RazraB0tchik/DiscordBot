@@ -1,4 +1,4 @@
-package com.bot.discordbot.services.youtube;
+package com.bot.discordbot.services;
 
 import com.bot.discordbot.entity.Roles;
 import com.bot.discordbot.entity.User;
@@ -43,8 +43,8 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void saveNewUser(String discordId, String refreshToken){
-        User user = new User(Long.parseLong(discordId), refreshToken, Roles.USER.toString(), true);
+    public void saveNewUser(String discordId, String refreshTokenDiscord){
+        User user = new User(Long.parseLong(discordId), refreshTokenDiscord, Roles.USER.toString(), true);
         userRepository.save(user);
     }
 }

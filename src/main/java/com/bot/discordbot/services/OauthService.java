@@ -1,7 +1,10 @@
-package com.bot.discordbot.services.youtube;
+package com.bot.discordbot.services;
 
+import com.bot.discordbot.dto.ConfigsDTO;
 import com.bot.discordbot.errors.BadAuthCode;
+import com.bot.discordbot.services.utils.OathProvider;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -9,29 +12,30 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.Map;
 
-import static com.bot.discordbot.configs.YouTubeConfigs.secret;
+import static com.bot.discordbot.configs.MainBotConfigs.secretYoutube;
+
 
 @Service
-public class YouTubeOauthTokens {
+public class OauthService {
     private String authParams;
     private String updateParams;
     private StringBuilder tokens = new StringBuilder();
 
     @Autowired
-    YouTubeOathProvider youTubeOathProvider;
+    OathProvider oathProvider;
 
-    public void generateAllTokens(String code){
+    public void generateAllTokens(String code, URL url, ConfigsDTO oauthDTO){
 
-        authParams = "code="+code+"&client_id="+secret.getClient_id()+"&client_secret="+secret.getClient_secret()+
-                "&redirect_uri="+secret.getRedirect_uris().get(0)+"&grant_type=authorization_code";
+        authParams = "code="+code+"&client_id="+oauthDTO.getClient_id()+"&client_secret="+oauthDTO.getClient_secret()+
+                "&redirect_uri="+oauthDTO.getRedirect_url()+"&grant_type=authorization_code";
 
         byte[] bytes = authParams.getBytes();
 
         try {
-            URL authUrl = new URL("https://oauth2.googleapis.com/token");
-            HttpURLConnection httpURLConnection = (HttpURLConnection) authUrl.openConnection();
+            HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
             httpURLConnection.setRequestMethod("POST");
             httpURLConnection.setRequestProperty("Host", "www.googleapis.com");
             httpURLConnection.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -52,10 +56,15 @@ public class YouTubeOauthTokens {
                     String[] elemMap = elem.split(":");
                     authResult.put(elemMap[0].replaceAll("\"", "").trim(), elemMap[1].replaceAll("\"", "").trim());
                 }
+
+                if(SecurityContextHolder.getContext().getAuthentication() == null){
+
+                }
+
 //                youTubeOathProvider.createNewUser(authResult);
             }
             else{
-                throw new BadAuthCode("Bad auth code, response from google having status: " + httpURLConnection.getResponseCode());
+                throw new BadAuthCode("Bad auth code, response having status: " + httpURLConnection.getResponseCode());
             }
 
         } catch (IOException | BadAuthCode e) {
@@ -67,5 +76,4 @@ public class YouTubeOauthTokens {
     public void updateAccessToken(){
 
     }
-
 }

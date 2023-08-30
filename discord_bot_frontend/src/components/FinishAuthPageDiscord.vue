@@ -4,13 +4,15 @@ import stomp_connection from "../tools/stomp_connection";
 export default {
   data() {
     return {
-      user_code: ""
+      user_code: "",
+      state: ""
     }
   },
   methods: {
     send_code: function (){
       this.user_code = this.$route.query.code;
-      stomp_connection.methods.send_message(this.user_code);
+      this.state = this.$route.query.state;
+      stomp_connection.methods.send_code_discord(this.user_code, this.state);
     }
   }
 }

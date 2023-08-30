@@ -1,8 +1,6 @@
-package com.bot.discordbot.services.youtube;
+package com.bot.discordbot.services.utils;
 
-import com.bot.discordbot.controllers.MainWebSocketController;
-import com.bot.discordbot.listeners.tools.CommandsList;
-import jakarta.servlet.ServletContext;
+import com.bot.discordbot.services.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 //import Spring Session!
@@ -15,20 +13,21 @@ import org.springframework.stereotype.Service;
 import java.util.Map;
 
 @Service
-public class YouTubeOathProvider {
+public class OathProvider {
     @Autowired
     UserService userService;
 
-    @Autowired
-    HttpServletRequest httpServletRequest;
-
-//    public void createNewUser(Map<String, String> tokens){
-//        userService.saveNewUser(CommandsList.discordId, tokens.get("refresh_token"));
+    public void registryNewUser(Map<String, String> tokens){
+//        userService.saveNewUser(CommandsList.discordId, tokens.get("refresh_token")); //?
 //        UserDetails userDetails = userService.loadUserByUsername(CommandsList.discordId);
 //        Authentication authenticationUser = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
 //        SecurityContextHolder.getContext().setAuthentication(authenticationUser);
-//
-//    }
+
+    }
+
+    public void addYoutubeToken(){
+
+    }
 
     public void checkUserOnActive(){
 

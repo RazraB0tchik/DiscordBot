@@ -16,6 +16,7 @@ coverage
 
 /cypress/videos/
 /cypress/screenshots/
+/client_secret_discord.json
 
 # Editor directories and files
 .vscode/*

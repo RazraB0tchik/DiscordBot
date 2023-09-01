@@ -1,10 +1,7 @@
 package com.bot.discordbot.services;
 
-import com.bot.discordbot.entity.Roles;
-import com.bot.discordbot.entity.User;
-import com.bot.discordbot.entity.UserDetailsElem;
+import com.bot.discordbot.entity.*;
 import com.bot.discordbot.repositories.UserRepository;
-import net.dv8tion.jda.api.requests.Route;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -13,10 +10,10 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
-
-import static org.hibernate.cfg.AvailableSettings.USER;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -43,8 +40,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void saveNewUser(String discordId, String refreshTokenDiscord){
-        User user = new User(Long.parseLong(discordId), refreshTokenDiscord, Roles.USER.toString(), true);
+    public void saveNewUser(String discordId, String refreshTokenDiscord, String fingerprint, String discordLogoId, String discordUsername){
+        User user = new User(Long.parseLong(discordId), Roles.USER.toString(), true);
+        DiscordRefreshTokens discordRefreshTokens = new DiscordRefreshTokens(fingerprint, refreshTokenDiscord, new Date());
+        Meta meta = new Meta(discordLogoId, discordUsername);
+        user.setMeta(meta);
+        user.setDiscordRefreshTokens(List.of(discordRefreshTokens));
         userRepository.save(user);
     }
 }

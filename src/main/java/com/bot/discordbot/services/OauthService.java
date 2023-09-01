@@ -2,7 +2,8 @@ package com.bot.discordbot.services;
 
 import com.bot.discordbot.dto.ConfigsDTO;
 import com.bot.discordbot.errors.BadAuthCode;
-import com.bot.discordbot.services.utils.OathProvider;
+import com.bot.discordbot.repositories.UserRepository;
+import com.bot.discordbot.services.utils.OauthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,19 +16,22 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.bot.discordbot.configs.MainBotConfigs.secretYoutube;
-
 
 @Service
 public class OauthService {
     private String authParams;
     private String updateParams;
-    private StringBuilder tokens = new StringBuilder();
 
     @Autowired
-    OathProvider oathProvider;
+    OauthProvider oauthProvider;
 
-    public void generateAllTokens(String code, URL url, ConfigsDTO oauthDTO){
+    @Autowired
+    DiscordService discordService;
+
+    @Autowired
+    UserRepository userRepository;
+
+    public void generateAllTokens(String code, URL url, ConfigsDTO oauthDTO, String fingerprint){
 
         authParams = "code="+code+"&client_id="+oauthDTO.getClient_id()+"&client_secret="+oauthDTO.getClient_secret()+
                 "&redirect_uri="+oauthDTO.getRedirect_url()+"&grant_type=authorization_code";
@@ -45,23 +49,17 @@ public class OauthService {
 
 
             if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
-                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(httpURLConnection.getInputStream()));
-                while (bufferedReader.read() != -1) {
-                    tokens.append(bufferedReader.readLine());
-                }
-                bufferedReader.close();
 
-                Map<String, String> authResult = new HashMap<>();
-                for(String elem: tokens.toString().split(",")){
-                    String[] elemMap = elem.split(":");
-                    authResult.put(elemMap[0].replaceAll("\"", "").trim(), elemMap[1].replaceAll("\"", "").trim());
-                }
+                Map<String, String> tokensInfo = oauthProvider.getDataFromResponseApi(httpURLConnection);
 
                 if(SecurityContextHolder.getContext().getAuthentication() == null){
+                    Map <String, String> userInfo = discordService.getUserDiscordInfo(tokensInfo.get("access_token"));
+
+                    if(userRepository.getUserByUserDiscordId(Long.parseLong(userInfo.get("id"))) == null){
+                        oauthProvider.registryNewUser(tokensInfo, userInfo, fingerprint);
+                    }
 
                 }
-
-//                youTubeOathProvider.createNewUser(authResult);
             }
             else{
                 throw new BadAuthCode("Bad auth code, response having status: " + httpURLConnection.getResponseCode());

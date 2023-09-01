@@ -5,6 +5,8 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
 
+import java.util.Collection;
+
 @Entity
 @Table(name = "discord_bot_users")
 @Component
@@ -19,21 +21,26 @@ public class User {
     @Column(name = "discord_id")
     private Long userDiscordId;
 
-    @Column(name = "refresh_token_youtube")
-    private String refreshTokenYouTube;
-
-    @Column(name = "refresh_token_discord")
-    private String refreshTokenDiscord;
-
     @Column(name = "role")
     private String role;
 
     @Column(name = "active")
     private Boolean active;
 
-    public User(Long userDiscordId,  String refreshTokenDiscord, String role, Boolean active) {
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "meta_id", referencedColumnName = "id")
+    private Meta meta;
+
+    @OneToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "youtube_token_id", referencedColumnName = "id")
+    private YouTubeRefreshTokens youTubeRefreshTokens;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "discord_tokens_id", referencedColumnName = "id")
+    private Collection<DiscordRefreshTokens> discordRefreshTokens;
+
+    public User(Long userDiscordId, String role, Boolean active) {
         this.userDiscordId = userDiscordId;
-        this.refreshTokenDiscord = refreshTokenDiscord;
         this.role = role;
         this.active = active;
     }

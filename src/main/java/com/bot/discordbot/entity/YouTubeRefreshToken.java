@@ -4,14 +4,13 @@ import jakarta.persistence.*;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 @Entity
-@Table(name = "user_youtube_token")
+@Table(name = "users_youtube_token")
 @Component
 @Data
 @NoArgsConstructor
-public class YouTubeRefreshTokens {
+public class YouTubeRefreshToken {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,9 +21,11 @@ public class YouTubeRefreshTokens {
     private String refreshYoutubeToken;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private User user;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    User user;
 
-    public YouTubeRefreshTokens(String refreshYoutubeToken) {
+    public YouTubeRefreshToken(String refreshYoutubeToken, User user) {
         this.refreshYoutubeToken = refreshYoutubeToken;
+        this.user = user;
     }
 }

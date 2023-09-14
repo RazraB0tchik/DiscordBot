@@ -1,23 +1,29 @@
 package com.bot.discordbot.configs;
 
+import com.bot.discordbot.filters.CsrfTokenCheckFilter;
 import com.bot.discordbot.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
+import org.springframework.security.web.csrf.CsrfTokenRequestAttributeHandler;
+import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
+import java.util.function.Consumer;
 
 @Configuration
 @EnableWebSecurity
@@ -25,6 +31,11 @@ public class SpringSecurityConfigs {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    CsrfTokenCheckFilter csrfTokenCheckFilter;
+
+    public static HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository;
 
     @Bean
     public AuthenticationManager authorizationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
@@ -40,25 +51,33 @@ public class SpringSecurityConfigs {
 
     @Bean
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
-
+        httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
         http
+//                .csrf(csrf -> {
+//                    csrf.csrfTokenRepository(httpSessionCsrfTokenRepository);
+//                    csrf.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()); //in production change by Xor
+//                    csrf.ignoringRequestMatchers("/auth/**");
+//                })
+                .cors(cors -> cors.configurationSource(customConfigurationSource()))
+//                    cors.configurationSource(configurationSource());})
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
-                request.requestMatchers("/music_bot/**").permitAll()
+                request.requestMatchers( "/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
+                //.addFilterAfter(csrfTokenCheckFilter, BasicAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
-    public CorsConfigurationSource configurationSource(){
+    public CorsConfigurationSource customConfigurationSource(){
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedMethod(HttpMethod.POST);
         configuration.addAllowedOrigin("http://localhost:5173");
+        configuration.setAllowedMethods(List.of("POST", "GET"));
+        configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
-        urlBasedCorsConfigurationSource.registerCorsConfiguration(Arrays.asList("/authorize_discord/**", "/authorize_youtube/**", "/**").toString(), configuration);
+        urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);
         return urlBasedCorsConfigurationSource;
     }
-
 }

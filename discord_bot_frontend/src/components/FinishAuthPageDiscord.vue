@@ -1,5 +1,5 @@
 <script>
-import stomp_connection from "../tools/stomp_connection";
+import connection from "../tools/controller";
 
 export default {
   data() {
@@ -12,7 +12,8 @@ export default {
     send_code: function (){
       this.user_code = this.$route.query.code;
       this.state = this.$route.query.state;
-      stomp_connection.methods.send_code_discord(this.user_code, this.state);
+      console.log(this.user_code + " " + this.state)
+      connection.methods.send_code_discord(this.user_code, this.state);
     }
   }
 }

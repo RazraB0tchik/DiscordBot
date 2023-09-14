@@ -42,10 +42,14 @@ public class OauthProvider {
     public Map<String, String> getDataFromResponseApi(HttpURLConnection connection){
         try(BufferedReader reader = new BufferedReader(new InputStreamReader(connection.getInputStream()))) {
             Map<String, String> userInfo = new HashMap<>();
-            while (reader.read() != -1){
-                String[] line = reader.readLine().split(":");
-                userInfo.put(line[0].replaceAll("\"", "").trim(), line[1].replaceAll("\"", "").trim());
+            while (reader.read() != -1) {
+                String splitLine[] = reader.readLine().split(",");
+                for (String param : splitLine) {
+                    String paramLine[] = param.split(":");
+                    userInfo.put(paramLine[0].replaceAll("[{}\"]", "").trim(), paramLine[1].replaceAll("[{}\"]", "").trim());
+                }
             }
+
             return userInfo;
         } catch (IOException e) {
             throw new RuntimeException(e);

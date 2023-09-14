@@ -1,5 +1,5 @@
 <script>
-import stomp_connection from "../tools/stomp_connection";
+import stomp_connection from "../tools/controller";
 
 export default {
   data() {

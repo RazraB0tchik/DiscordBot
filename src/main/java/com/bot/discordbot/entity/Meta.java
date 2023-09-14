@@ -22,10 +22,12 @@ public class Meta {
     private String userDiscordName;
 
     @OneToOne(cascade = CascadeType.ALL)
-    private User user;
+    @JoinColumn(name = "user_id", referencedColumnName = "id")
+    User user;
 
-    public Meta(String userDiscordLogo, String userDiscordName) {
+    public Meta(String userDiscordLogo, String userDiscordName, User user) {
         this.userDiscordLogo = userDiscordLogo;
         this.userDiscordName = userDiscordName;
+        this.user = user;
     }
 }

@@ -27,17 +27,8 @@ public class User {
     @Column(name = "active")
     private Boolean active;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "meta_id", referencedColumnName = "id")
-    private Meta meta;
-
-    @OneToOne(cascade = CascadeType.ALL)
-    @JoinColumn(name = "youtube_token_id", referencedColumnName = "id")
-    private YouTubeRefreshTokens youTubeRefreshTokens;
-
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "discord_tokens_id", referencedColumnName = "id")
-    private Collection<DiscordRefreshTokens> discordRefreshTokens;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private Collection<DiscordRefreshToken> discordRefreshTokens;
 
     public User(Long userDiscordId, String role, Boolean active) {
         this.userDiscordId = userDiscordId;

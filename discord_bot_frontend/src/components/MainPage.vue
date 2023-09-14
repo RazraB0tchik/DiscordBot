@@ -1,18 +1,14 @@
 <script>
-import stomp_connection from "../tools/stomp_connection";
-import fingerprint from "get-browser-fingerprint"
+import controller from "../tools/controller";
 import {defineComponent} from "vue";
-import {createRouter as $router} from "vue-router";
+import getBrowserFingerprint from "get-browser-fingerprint";
 
 export default defineComponent({
 
-  mounted() {
-    localStorage.user_code = fingerprint.getBrowserFingerprint({})
-  },
-
   methods: {
     getUrl(){
-      stomp_connection.methods.send_discord_auth_request();
+      controller.methods.send_discord_auth_request();
+      localStorage.user_print = getBrowserFingerprint({enableWebgl: true});
     }
   }
 })

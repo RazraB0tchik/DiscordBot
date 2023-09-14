@@ -9,10 +9,10 @@ import java.util.Date;
 
 @Entity
 @Component
-@Table(name = "users_tokens")
+@Table(name = "users_discord_token")
 @Data
 @NoArgsConstructor
-public class DiscordRefreshTokens {
+public class DiscordRefreshToken {
 
     @Column(name = "id")
     @Id
@@ -29,11 +29,13 @@ public class DiscordRefreshTokens {
     private Date lastActiveTime;
 
     @ManyToOne(cascade = CascadeType.ALL)
+    @JoinColumn(name = "user_id")
     private User user;
 
-    public DiscordRefreshTokens(String fingerprint, String refreshTokenDiscord, Date lastActiveTime) {
+    public DiscordRefreshToken(String fingerprint, String refreshTokenDiscord, Date lastActiveTime, User user) {
         this.fingerprint = fingerprint;
         this.refreshTokenDiscord = refreshTokenDiscord;
         this.lastActiveTime = lastActiveTime;
+        this.user = user;
     }
 }

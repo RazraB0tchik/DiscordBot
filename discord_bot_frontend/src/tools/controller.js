@@ -1,50 +1,67 @@
 
-import discord_secret from "/home/makar/IdeaProjects/Bots/DiscordBot/src/main/resources/client_secret_discord.json"
-import getBrowserFingerprint from "get-browser-fingerprint";
+import {uuid} from "vue-uuid";
 import axios from "axios";
 
 const baseUrl = "http://localhost:7500"
 
 const api = axios.create(
-    {baseURL: baseUrl});
+    {baseURL: baseUrl,
+    withCredentials: true});
+
+let responseDataFromLink = [];
+let responseDataFromDiscordCode = [];
 
 export default {
 
     data() {
         return {
-            client_connected: null,
-            token: null,
+            csrf_token: null,
             headerName: null,
             state: null
         }
     },
     methods: {
         async send_code_youtube(code){
-           await api.post(  "auth/youtubeAuthRedirect", {
+           await api.post(  "auth/youtube_redirect", {
                 'code' : code
             }).then(response => {
                 console.log(response)
             })
         },
 
+       async send_discord_auth_request(){
+             localStorage.state = uuid.v4();
+             window.location.href= "https://discord.com/api/oauth2/authorize?client_id=1124629066344046674&redirect_uri=http%3A%2F%2Flocalhost%3A5173%2Fauthorize_discord&response_type=code&scope=identify&state="+ localStorage.state;
+       },
 
-        send_discord_auth_request: function (){
-            let state = Math.random().toString(30);
-            localStorage.state=state;
-            let urlDiscordAuth = "https://discord.com/oauth2/authorize?response_type=code"+"&client_id="+ discord_secret.client_id +"&scope=identify&state="+state+"&redirect_uri="+discord_secret.redirect_url;
-            window.location.href = urlDiscordAuth;
-        },
+      async get_csrf_token(){
+            await api.get("/auth/get_csrf").then(response => {
+                this.csrf_token = response.data.getHeader("X-Csrf-Token");
+            })
+      },
+
+     async update_access_token(){
+       await api.get("/auth/update_access",
+           {
+               withCredentials: true,
+               headers:{
+                   "SameSite": "None"
+               }
+           })
+           .then(response => console.log(response))
+     },
 
        async send_code_discord(code, state_user){
             if (localStorage.state === state_user && localStorage.state!==null) {
-              await api.post("/auth/discordAuthRedirect", {
+              await api.post("/auth/discord_redirect", {
                     'code': code,
                     'fingerprint': localStorage.user_print
                 },
                   ).then(response => {
-                    console.log(response)
-                    localStorage.state = null;
-                })
+                   responseDataFromDiscordCode = response.data;
+                   localStorage.access = responseDataFromDiscordCode.access_token;
+                   localStorage.date = responseDataFromDiscordCode.create_date;
+                  });
             }
             else
                 alert("Please try authorize fully :(")

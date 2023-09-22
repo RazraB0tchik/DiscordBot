@@ -1,4 +1,4 @@
-package com.bot.discordbot.errors;
+package com.bot.discordbot.exceptions;
 
 import javax.naming.AuthenticationException;
 

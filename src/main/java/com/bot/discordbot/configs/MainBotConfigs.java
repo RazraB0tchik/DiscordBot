@@ -1,7 +1,7 @@
 package com.bot.discordbot.configs;
 
-import com.bot.discordbot.dto.DiscordConfigsDTO;
-import com.bot.discordbot.dto.YouTbConfigsDTO;
+import com.bot.discordbot.dto.DiscordConfigs;
+import com.bot.discordbot.dto.YouTbConfigs;
 import com.bot.discordbot.listeners.CommandsListener;
 import com.bot.discordbot.listeners.JoinListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -28,11 +28,11 @@ public class MainBotConfigs {
     @Autowired
     JoinListener joinListener;
 
-    public static DiscordConfigsDTO secretDiscord;
+    public static DiscordConfigs secretDiscord;
     public static JDA jda;
 
     public static String authUrlYoutube;
-    public static YouTbConfigsDTO secretYoutube;
+    public static YouTbConfigs secretYoutube;
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
@@ -40,7 +40,7 @@ public class MainBotConfigs {
     public void initDiscordConfigs(){
         URL configJSON = MainBotConfigs.class.getResource("/client_secret_discord.json");
         try {
-            secretDiscord = objectMapper.readValue(configJSON, DiscordConfigsDTO.class);
+            secretDiscord = objectMapper.readValue(configJSON, DiscordConfigs.class);
 
         } catch (IOException e) {
             throw new RuntimeException(e);
@@ -53,7 +53,7 @@ public class MainBotConfigs {
         URL configJSON = MainBotConfigs.class.getResource("/client_secret_youtube.json");
         try {
 
-            secretYoutube = objectMapper.readValue(configJSON, YouTbConfigsDTO.class);
+            secretYoutube = objectMapper.readValue(configJSON, YouTbConfigs.class);
 
             authUrlYoutube = String.format("https://accounts.google.com/o/oauth2/v2/auth?" +
                     "scope=%s"+

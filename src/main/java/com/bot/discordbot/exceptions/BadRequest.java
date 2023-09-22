@@ -1,6 +1,5 @@
-package com.bot.discordbot.errors;
+package com.bot.discordbot.exceptions;
 
-import com.sun.jdi.request.ExceptionRequest;
 import org.springframework.security.web.firewall.RequestRejectedException;
 
 public class BadRequest extends RequestRejectedException {

@@ -1,20 +1,18 @@
 // import axios from "axios";
+// import controller from "@/tools/controller";
 //
 // const app = axios.create({
-//     baseURL: "http://localhost:7500/**"
+//     baseURL: "http://localhost:7500/auth/update_tokens"
 // })
 //
-// let tokenCsrf = null;
 //
 // app.interceptors.request.use(
 //     configs => {
-//         console.log("sad")
-//         if(configs.headers.get("Connection") === "upgrade"){
-//             configs.headers = {'X-CSRF-TOKEN': tokenCsrf};
-//         }
+//        controller.methods.get_csrf_token();
+//        configs.headers = {"X-CSRF-TOKEN": controller.data().csrf_token};
 //     }
 // )
-//
+
 // app.interceptors.response.use(
 //     configs=>{
 //         console.log("aasd")

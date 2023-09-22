@@ -10,14 +10,14 @@ import org.springframework.stereotype.Component;
 @Data
 @NoArgsConstructor
 
-public class DiscordConfigsDTO extends ConfigsDTO{
+public class DiscordConfigs extends Configs {
     private String client_id;
     private String auth_url;
     private String bot_token;
     private String redirect_url;
     private String client_secret;
 
-    public DiscordConfigsDTO(String clientId, String authUrl, String redirectUrl, String clientSecret, String botToken) {
+    public DiscordConfigs(String clientId, String authUrl, String redirectUrl, String clientSecret, String botToken) {
         super(clientId, authUrl, redirectUrl, clientSecret);
         bot_token = botToken;
     }

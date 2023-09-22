@@ -1,6 +1,6 @@
 package com.bot.discordbot.services;
 
-import com.bot.discordbot.errors.BadRequest;
+import com.bot.discordbot.exceptions.BadRequest;
 import com.bot.discordbot.services.utils.OauthProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class DiscordService {
@@ -20,7 +20,8 @@ public class DiscordService {
     @Autowired
     OauthProvider oauthProvider;
 
-    public Map<String, String> getUserDiscordInfo(String accessToken){
+
+    public Map<String, String> getUserInfo(String accessToken){
         try {
             URL urlRequest = new URL(urlDiscord+"/users/@me");
             HttpURLConnection httpURLConnection = (HttpURLConnection) urlRequest.openConnection();
@@ -39,5 +40,12 @@ public class DiscordService {
             throw new RuntimeException(e);
         }
     }
+
+//    public Map<String, String> generateUrl() throws MalformedURLException {
+//        UUID state = UUID.randomUUID();
+//        String redirectLink = "&state=" + state;
+//        Map<String, String> urlParams = Map.of("url", redirectLink, "state", state.toString());
+//        return urlParams;
+//    }
 
 }

@@ -11,7 +11,7 @@ import java.util.ArrayList;
 @JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @NoArgsConstructor
-public class YouTbConfigsDTO extends ConfigsDTO {
+public class YouTbConfigs extends Configs {
 
     private String client_id;
     private String project_id;
@@ -22,7 +22,7 @@ public class YouTbConfigsDTO extends ConfigsDTO {
     private String redirect_uris;
     private ArrayList<String> javascript_origins;
 
-    public YouTbConfigsDTO(String clientId, String authUrl, String redirectUrl, String clientSecret, String projectId, String tokenUrl, String authProviderX509CertUrl, ArrayList<String> javascriptOrigins) {
+    public YouTbConfigs(String clientId, String authUrl, String redirectUrl, String clientSecret, String projectId, String tokenUrl, String authProviderX509CertUrl, ArrayList<String> javascriptOrigins) {
         super(clientId, authUrl, redirectUrl, clientSecret);
         project_id = projectId;
         token_url = tokenUrl;

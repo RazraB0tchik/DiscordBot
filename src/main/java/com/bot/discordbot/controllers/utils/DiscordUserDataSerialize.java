@@ -1,4 +1,4 @@
-package com.bot.discordbot.controllers;
+package com.bot.discordbot.controllers.utils;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 import lombok.AllArgsConstructor;

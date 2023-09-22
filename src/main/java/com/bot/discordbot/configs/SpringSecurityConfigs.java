@@ -1,6 +1,5 @@
 package com.bot.discordbot.configs;
 
-import com.bot.discordbot.filters.CsrfTokenCheckFilter;
 import com.bot.discordbot.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -32,9 +31,6 @@ public class SpringSecurityConfigs {
     @Autowired
     UserService userService;
 
-    @Autowired
-    CsrfTokenCheckFilter csrfTokenCheckFilter;
-
     public static HttpSessionCsrfTokenRepository httpSessionCsrfTokenRepository;
 
     @Bean
@@ -53,20 +49,18 @@ public class SpringSecurityConfigs {
     public SecurityFilterChain securityFilterChain (HttpSecurity http) throws Exception {
         httpSessionCsrfTokenRepository = new HttpSessionCsrfTokenRepository();
         http
-//                .csrf(csrf -> {
-//                    csrf.csrfTokenRepository(httpSessionCsrfTokenRepository);
-//                    csrf.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()); //in production change by Xor
-//                    csrf.ignoringRequestMatchers("/auth/**");
-//                })
+                .csrf(csrf -> {
+                    csrf.csrfTokenRepository(httpSessionCsrfTokenRepository);
+                    csrf.csrfTokenRequestHandler(new CsrfTokenRequestAttributeHandler()); //in production change by Xor
+                    csrf.ignoringRequestMatchers("/auth/get_csrf/", "/auth/youtube_redirect/**", "/auth/discord_redirect/**");
+                })
                 .cors(cors -> cors.configurationSource(customConfigurationSource()))
-//                    cors.configurationSource(configurationSource());})
                 .csrf(AbstractHttpConfigurer::disable)
                 .httpBasic(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(request ->
-                request.requestMatchers( "/**").permitAll()
+                request.requestMatchers( "/auth/**").permitAll()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));
-                //.addFilterAfter(csrfTokenCheckFilter, BasicAuthenticationFilter.class);
         return http.build();
     }
 
@@ -75,6 +69,7 @@ public class SpringSecurityConfigs {
         CorsConfiguration configuration = new CorsConfiguration();
         configuration.addAllowedOrigin("http://localhost:5173");
         configuration.setAllowedMethods(List.of("POST", "GET"));
+        configuration.setAllowCredentials(true);
         configuration.setAllowedHeaders(List.of("*"));
         UrlBasedCorsConfigurationSource urlBasedCorsConfigurationSource = new UrlBasedCorsConfigurationSource();
         urlBasedCorsConfigurationSource.registerCorsConfiguration("/**", configuration);

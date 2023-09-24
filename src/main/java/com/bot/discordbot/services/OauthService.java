@@ -58,6 +58,7 @@ public class OauthService {
                   if(SecurityContextHolder.getContext().getAuthentication().getPrincipal() == "anonymousUser"){
                     Map <String, String> userInfo = discordService.getUserInfo(tokensInfo.get("access_token"));
                     if(userRepository.getUserByUserDiscordId(Long.parseLong(userInfo.get("id"))) == null) {
+                        System.out.println(tokensInfo.get("expires_in"));
                         oauthProvider.registryNewUser(tokensInfo, userInfo, fingerprint);
                         return tokensInfo;
                     }
@@ -79,7 +80,7 @@ public class OauthService {
     public void updateAccessToken(String fingerprint) throws DiscordTokensNotFound {
         DiscordRefreshToken discordRefreshToken = discordTokenRepository.getDiscordRefreshTokenByFingerprint(fingerprint);
         if(discordRefreshToken != null){
-//            if()
+
         }
         else {
             throw new DiscordTokensNotFound("Discord tokens not found, user not exist!");

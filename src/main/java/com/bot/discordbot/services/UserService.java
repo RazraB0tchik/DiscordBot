@@ -5,6 +5,7 @@ import com.bot.discordbot.repositories.DiscordTokenRepository;
 import com.bot.discordbot.repositories.MetaRepository;
 import com.bot.discordbot.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,6 +29,9 @@ public class UserService implements UserDetailsService {
     @Autowired
     MetaRepository metaRepository;
 
+    @Value("${discord.token.refresh.expired}")
+    private long expiredDate;
+
     private Collection<GrantedAuthority> authorities;
 
     public UserService(Collection<GrantedAuthority> authorities) {
@@ -49,7 +53,8 @@ public class UserService implements UserDetailsService {
 
     public void saveNewUser(String discordId, String refreshTokenDiscord, String fingerprint, String discordLogoId, String discordUsername){
         User user = new User(Long.parseLong(discordId), Roles.USER.toString(), true);
-        DiscordRefreshToken discordRefreshToken = new DiscordRefreshToken(fingerprint, refreshTokenDiscord, new Date(), user);
+        Date date = new Date();
+        DiscordRefreshToken discordRefreshToken = new DiscordRefreshToken(fingerprint, refreshTokenDiscord, date, new Date(date.getTime()+expiredDate), user);
         Meta userMeta = new Meta(discordLogoId, discordUsername, user);
         userRepository.save(user);
         discordTokenRepository.save(discordRefreshToken);

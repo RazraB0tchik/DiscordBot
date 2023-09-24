@@ -56,12 +56,9 @@ public class AuthController {
         return ResponseEntity.ok(new DiscordUserDataSerialize(tokensInfo.get("access_token"), new Date().getTime()));
     }
 
-    @GetMapping(value = "/update_access")
+    @PutMapping(value = "/update_access")
     public void updateAccess(HttpServletRequest httpServletRequest){
-        Cookie[] cookie = httpServletRequest.getCookies();
-        for (Cookie el: cookie){
-            System.out.println(el.getValue());
-        }
+
     }
 
     @GetMapping("/get_csrf")

@@ -41,6 +41,10 @@ public class DiscordService {
         }
     }
 
+    public void updateAccessToken(){
+
+    }
+
 //    public Map<String, String> generateUrl() throws MalformedURLException {
 //        UUID state = UUID.randomUUID();
 //        String redirectLink = "&state=" + state;

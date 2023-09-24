@@ -28,11 +28,14 @@ public class DiscordRefreshToken {
     @Column(name = "active_time")
     private Date lastActiveTime;
 
+    @Column(name = "dead_time")
+    private Date deadTime;
+
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
     private User user;
 
-    public DiscordRefreshToken(String fingerprint, String refreshTokenDiscord, Date lastActiveTime, User user) {
+    public DiscordRefreshToken(String fingerprint, String refreshTokenDiscord, Date lastActiveTime, Date deadDate, User user) {
         this.fingerprint = fingerprint;
         this.refreshTokenDiscord = refreshTokenDiscord;
         this.lastActiveTime = lastActiveTime;

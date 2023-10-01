@@ -28,7 +28,7 @@ public class User {
     private Boolean active;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    private Collection<DiscordRefreshToken> discordRefreshTokens;
+    private Collection<DiscordTokens> discordTokens;
 
     public User(Long userDiscordId, String role, Boolean active) {
         this.userDiscordId = userDiscordId;

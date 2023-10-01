@@ -5,6 +5,7 @@ import com.bot.discordbot.dto.YouTbConfigs;
 import com.bot.discordbot.listeners.CommandsListener;
 import com.bot.discordbot.listeners.JoinListener;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.annotation.PostConstruct;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -36,7 +37,7 @@ public class MainBotConfigs {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    @Bean
+    @PostConstruct
     public void initDiscordConfigs(){
         URL configJSON = MainBotConfigs.class.getResource("/client_secret_discord.json");
         try {
@@ -45,10 +46,9 @@ public class MainBotConfigs {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
     }
 
-    @Bean
+    @PostConstruct
     public void initYoutubeConfigs(){
         URL configJSON = MainBotConfigs.class.getResource("/client_secret_youtube.json");
         try {
@@ -70,7 +70,7 @@ public class MainBotConfigs {
         }
     }
 
-    @Bean
+    @PostConstruct
     public void createJDA() {
         jda=JDABuilder.createDefault(secretDiscord.getBot_token())
                 .addEventListeners(commandsListener)
@@ -86,7 +86,5 @@ public class MainBotConfigs {
         ).queue();
 
     }
-
-
 
 }

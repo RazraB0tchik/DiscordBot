@@ -38,6 +38,8 @@ public class DiscordService {
 
         } catch (IOException e) {
             throw new RuntimeException(e);
+        } catch (BadRequest e) {
+            throw new RuntimeException(e);
         }
     }
 

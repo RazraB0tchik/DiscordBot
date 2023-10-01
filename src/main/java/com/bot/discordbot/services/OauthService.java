@@ -1,13 +1,15 @@
 package com.bot.discordbot.services;
 
 import com.bot.discordbot.dto.Configs;
-import com.bot.discordbot.entity.DiscordRefreshToken;
+import com.bot.discordbot.entity.DiscordTokens;
 import com.bot.discordbot.exceptions.BadAuthCode;
+import com.bot.discordbot.exceptions.BadRequest;
 import com.bot.discordbot.exceptions.DiscordTokensNotFound;
 import com.bot.discordbot.exceptions.UserAlreadyExists;
 import com.bot.discordbot.repositories.DiscordTokenRepository;
 import com.bot.discordbot.repositories.UserRepository;
 import com.bot.discordbot.services.utils.OauthProvider;
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,7 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -52,14 +55,12 @@ public class OauthService {
             httpURLConnection.connect();
 
             if (httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
-
+                Date dateCreateTokens = new Date();
                 Map<String, String> tokensInfo = oauthProvider.getDataFromResponseApi(httpURLConnection);
-
                   if(SecurityContextHolder.getContext().getAuthentication().getPrincipal() == "anonymousUser"){
                     Map <String, String> userInfo = discordService.getUserInfo(tokensInfo.get("access_token"));
                     if(userRepository.getUserByUserDiscordId(Long.parseLong(userInfo.get("id"))) == null) {
-                        System.out.println(tokensInfo.get("expires_in"));
-                        oauthProvider.registryNewUser(tokensInfo, userInfo, fingerprint);
+                        oauthProvider.registryNewUser(tokensInfo, userInfo, fingerprint, dateCreateTokens);
                         return tokensInfo;
                     }
                     else{
@@ -77,10 +78,14 @@ public class OauthService {
         return null;
     }
 
-    public void updateAccessToken(String fingerprint) throws DiscordTokensNotFound {
-        DiscordRefreshToken discordRefreshToken = discordTokenRepository.getDiscordRefreshTokenByFingerprint(fingerprint);
-        if(discordRefreshToken != null){
-
+    public void updateAccessToken(String fingerprint, Cookie[] cookies) throws DiscordTokensNotFound {
+        DiscordTokens discordTokens = discordTokenRepository.getDiscordRefreshTokenByFingerprint(fingerprint);
+        if(discordTokens != null){
+            try {
+               // oauthProvider.getRefreshToken(cookies);
+            } catch (BadRequest e) {
+                throw new RuntimeException(e);
+            }
         }
         else {
             throw new DiscordTokensNotFound("Discord tokens not found, user not exist!");

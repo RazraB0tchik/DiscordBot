@@ -15,7 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.Map;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -51,13 +51,12 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void saveNewUser(String discordId, String refreshTokenDiscord, String fingerprint, String discordLogoId, String discordUsername){
+    public void saveNewUser(String discordId, Map<String, String> tokens, String fingerprint, String discordLogoId, String discordUsername, Date createdate){
         User user = new User(Long.parseLong(discordId), Roles.USER.toString(), true);
-        Date date = new Date();
-        DiscordRefreshToken discordRefreshToken = new DiscordRefreshToken(fingerprint, refreshTokenDiscord, date, new Date(date.getTime()+expiredDate), user);
+        DiscordTokens discordTokens = new DiscordTokens(fingerprint, tokens.get("refresh_token"), new Date(createdate.getTime()+tokens.get("expires_in")) ,createdate, new Date(createdate.getTime()+expiredDate), user);
         Meta userMeta = new Meta(discordLogoId, discordUsername, user);
         userRepository.save(user);
-        discordTokenRepository.save(discordRefreshToken);
+        discordTokenRepository.save(discordTokens);
         metaRepository.save(userMeta);
 
     }

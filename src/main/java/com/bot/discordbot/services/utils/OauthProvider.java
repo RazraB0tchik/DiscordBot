@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -24,8 +25,8 @@ public class OauthProvider {
     @Autowired
     UserService userService;
 
-    public void registryNewUser(Map<String, String> tokens, Map<String, String> userInfo, String fingerprint){
-        userService.saveNewUser(userInfo.get("id"), tokens.get("refresh_token"), fingerprint, userInfo.get("avatar"), userInfo.get("username")); //?
+    public void registryNewUser(Map<String, String> tokens, Map<String, String> userInfo, String fingerprint, Date createDate){
+        userService.saveNewUser(userInfo.get("id"), tokens, fingerprint, userInfo.get("avatar"), userInfo.get("username"), createDate); //?
         UserDetails userDetails = userService.loadUserByUsername(userInfo.get("id"));
         Authentication authenticationUser = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
         SecurityContextHolder.getContext().setAuthentication(authenticationUser);

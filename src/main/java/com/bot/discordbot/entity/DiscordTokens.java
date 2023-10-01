@@ -12,7 +12,7 @@ import java.util.Date;
 @Table(name = "users_discord_token")
 @Data
 @NoArgsConstructor
-public class DiscordRefreshToken {
+public class DiscordTokens {
 
     @Column(name = "id")
     @Id
@@ -25,8 +25,11 @@ public class DiscordRefreshToken {
     @Column(name = "refresh_token_discord")
     private String refreshTokenDiscord;
 
+    @Column(name = "access_dead_time")
+    private Date accessTokenDeadTime;
+
     @Column(name = "active_time")
-    private Date lastActiveTime;
+    private Date generateTime;
 
     @Column(name = "dead_time")
     private Date deadTime;
@@ -35,10 +38,12 @@ public class DiscordRefreshToken {
     @JoinColumn(name = "user_id")
     private User user;
 
-    public DiscordRefreshToken(String fingerprint, String refreshTokenDiscord, Date lastActiveTime, Date deadDate, User user) {
+    public DiscordTokens(String fingerprint, String refreshTokenDiscord, Date accessTokenDeadTime, Date generateTime, Date deadTime, User user) {
         this.fingerprint = fingerprint;
         this.refreshTokenDiscord = refreshTokenDiscord;
-        this.lastActiveTime = lastActiveTime;
+        this.accessTokenDeadTime = accessTokenDeadTime;
+        this.generateTime = generateTime;
+        this.deadTime = deadTime;
         this.user = user;
     }
 }

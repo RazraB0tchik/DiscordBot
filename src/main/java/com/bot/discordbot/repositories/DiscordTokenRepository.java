@@ -1,12 +1,14 @@
 package com.bot.discordbot.repositories;
 
-import com.bot.discordbot.entity.DiscordRefreshToken;
+import com.bot.discordbot.entity.DiscordTokens;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface DiscordTokenRepository extends JpaRepository<DiscordRefreshToken, Integer> {
-     DiscordRefreshToken getDiscordRefreshTokenById(int id);
+public interface DiscordTokenRepository extends JpaRepository<DiscordTokens, Integer> {
+     DiscordTokens getDiscordRefreshTokenById(int id);
 
-     DiscordRefreshToken getDiscordRefreshTokenByFingerprint(String fingerprint);
+     DiscordTokens getDiscordTokensByRefreshTokenDiscord(String refreshToken);
+     DiscordTokens getDiscordRefreshTokenByFingerprint(String fingerprint);
+
 }

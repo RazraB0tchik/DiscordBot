@@ -1,6 +1,10 @@
 package com.bot.discordbot.services.utils;
 
+import com.bot.discordbot.entity.DiscordTokens;
+import com.bot.discordbot.exceptions.BadRequest;
+import com.bot.discordbot.repositories.DiscordTokenRepository;
 import com.bot.discordbot.services.UserService;
+import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
 //import Spring Session!
 import org.springframework.beans.factory.annotation.Value;
@@ -24,6 +28,9 @@ public class OauthProvider {
 
     @Autowired
     UserService userService;
+
+    @Autowired
+    DiscordTokenRepository discordTokenRepository;
 
     public void registryNewUser(Map<String, String> tokens, Map<String, String> userInfo, String fingerprint, Date createDate){
         userService.saveNewUser(userInfo.get("id"), tokens, fingerprint, userInfo.get("avatar"), userInfo.get("username"), createDate); //?
@@ -55,5 +62,20 @@ public class OauthProvider {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public DiscordTokens getRefreshToken(Cookie[] cookies) throws BadRequest {
+        String refreshToken = null;
+        DiscordTokens discordToken = null;
+        for (Cookie el : cookies) {
+            if (el.getName().equals("user_data")) {
+                refreshToken = el.getValue();
+                break;
+            }
+        }
+        if(refreshToken != null){
+            discordToken = discordTokenRepository.getDiscordTokensByRefreshTokenDiscord(refreshToken);
+        }
+        return discordToken;
     }
 }

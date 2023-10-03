@@ -6,6 +6,7 @@ import com.bot.discordbot.exceptions.BadAuthCode;
 import com.bot.discordbot.exceptions.BadRequest;
 import com.bot.discordbot.exceptions.DiscordTokensNotFound;
 import com.bot.discordbot.exceptions.UserAlreadyExists;
+//import com.bot.discordbot.filters.FilterProvider;
 import com.bot.discordbot.repositories.DiscordTokenRepository;
 import com.bot.discordbot.repositories.UserRepository;
 import com.bot.discordbot.services.utils.OauthProvider;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -79,16 +81,16 @@ public class OauthService {
     }
 
     public void updateAccessToken(String fingerprint, Cookie[] cookies) throws DiscordTokensNotFound {
-        DiscordTokens discordTokens = discordTokenRepository.getDiscordRefreshTokenByFingerprint(fingerprint);
-        if(discordTokens != null){
-            try {
-               // oauthProvider.getRefreshToken(cookies);
-            } catch (BadRequest e) {
-                throw new RuntimeException(e);
+        try {
+
+            DiscordTokens discordTokens = oauthProvider.getRefreshToken(cookies);
+            if(discordTokens != null && discordTokens.getFingerprint().equals(fingerprint)){
+
             }
-        }
-        else {
-            throw new DiscordTokensNotFound("Discord tokens not found, user not exist!");
+
+
+        } catch (BadRequest e) {
+            throw new RuntimeException(e);
         }
     }
 }

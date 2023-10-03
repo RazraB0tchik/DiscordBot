@@ -22,7 +22,7 @@ import java.net.URL;
 
 @Configuration
 public class MainBotConfigs {
-
+//PostConstruction
     @Autowired
     CommandsListener commandsListener;
 

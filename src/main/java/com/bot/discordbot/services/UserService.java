@@ -51,9 +51,9 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void saveNewUser(String discordId, Map<String, String> tokens, String fingerprint, String discordLogoId, String discordUsername, Date createdate){
+    public void saveNewUser(String discordId, Map<String, String> tokens, String fingerprint, String discordLogoId, String discordUsername, Date createDate){
         User user = new User(Long.parseLong(discordId), Roles.USER.toString(), true);
-        DiscordTokens discordTokens = new DiscordTokens(fingerprint, tokens.get("refresh_token"), new Date(createdate.getTime()+tokens.get("expires_in")) ,createdate, new Date(createdate.getTime()+expiredDate), user);
+        DiscordTokens discordTokens = new DiscordTokens(fingerprint, tokens.get("refresh_token"), new Date(createDate.getTime()+Long.parseLong(tokens.get("expires_in"))) ,createDate, new Date(createDate.getTime()+expiredDate), user);
         Meta userMeta = new Meta(discordLogoId, discordUsername, user);
         userRepository.save(user);
         discordTokenRepository.save(discordTokens);

@@ -24,8 +24,8 @@ public class DiscordApiTests {
 
    @Test
    void getRefreshTokenTest(){
-       String refreshToken = "NtMFXDIK1CDL7v3leFD0MVf3lvM1F";
-       Map<String, String> test_result = discordService.updateAccessToken(refreshToken);
+       DiscordTokens discordTokens = discordTokenRepository.getDiscordRefreshTokenById(18);
+       Map<String, String> test_result = discordService.updateAccessToken(discordTokens.getRefreshTokenDiscord());
        for(Map.Entry <String, String> elem : test_result.entrySet()){
            System.out.println(elem.getKey() + elem.getValue());
        }

@@ -39,6 +39,13 @@ public class OauthProvider {
         SecurityContextHolder.getContext().setAuthentication(authenticationUser);
     }
 
+    public void updateUserTokens(Map<String, String> tokens, Date generateDate, DiscordTokens discordTokens){
+        userService.updateUserTokens(tokens, generateDate, discordTokens);
+        UserDetails userDetails = userService.loadUserByUsername(discordTokens.getUser().getUserDiscordId().toString());
+        Authentication authenticationUser = new UsernamePasswordAuthenticationToken(userDetails, userDetails.getAuthorities());
+        SecurityContextHolder.getContext().setAuthentication(authenticationUser);
+    }
+
     public void addYoutubeToken(){
 
     }

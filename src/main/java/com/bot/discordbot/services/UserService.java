@@ -60,4 +60,11 @@ public class UserService implements UserDetailsService {
         metaRepository.save(userMeta);
 
     }
+
+    public void updateUserTokens(Map<String, String> userTokens, Date generateTime, DiscordTokens discordTokens){
+        discordTokens.setRefreshTokenDiscord(userTokens.get("refresh_token"));
+        discordTokens.setAccessTokenDeadTime(new Date(generateTime.getTime() + Long.parseLong(userTokens.get("expires_in"))));
+        discordTokens.setDeadTime(new Date(generateTime.getTime() + expiredDate));
+        discordTokens.setGenerateTime(generateTime);
+    }
 }

@@ -29,7 +29,7 @@ public class DiscordApiTests {
        for(Map.Entry <String, String> elem : test_result.entrySet()){
            System.out.println(elem.getKey() + elem.getValue());
        }
-       assert !test_result.isEmpty() : "Тут где то ошибка";
+       assert !test_result.isEmpty() : "Error";
    }
 
 }

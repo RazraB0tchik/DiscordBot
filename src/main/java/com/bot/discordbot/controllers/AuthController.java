@@ -4,6 +4,7 @@ import com.bot.discordbot.configs.MainBotConfigs;
 import com.bot.discordbot.controllers.utils.DiscordUserDataSerialize;
 import com.bot.discordbot.dto.OauthCode;
 import com.bot.discordbot.dto.UpdateData;
+import com.bot.discordbot.exceptions.DiscordTokensNotFound;
 import com.bot.discordbot.services.DiscordService;
 import com.bot.discordbot.services.OauthService;
 import com.bot.discordbot.services.utils.CookieProvider;
@@ -53,12 +54,14 @@ public class AuthController {
     public ResponseEntity<DiscordUserDataSerialize> discordAuth(@RequestBody OauthCode oauthCode, HttpServletResponse response) throws MalformedURLException {
         Map<String, String> tokensInfo = oauthService.generateAllTokens(oauthCode.getCode(), new URL(urlDiscord + "/oauth2/token"), MainBotConfigs.secretDiscord, oauthCode.getFingerprint());
         response.addCookie(cookieProvider.createNewCookie(tokensInfo));
-        return ResponseEntity.ok(new DiscordUserDataSerialize(tokensInfo.get("access_token"), new Date().getTime()));
+        return ResponseEntity.ok(new DiscordUserDataSerialize(tokensInfo.get("access_token")));
     }
 
     @PutMapping(value = "/update_access")
-    public void updateAccess(HttpServletRequest httpServletRequest){
-
+    public ResponseEntity<DiscordUserDataSerialize> updateAccess(@RequestBody UpdateData updateData, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) throws DiscordTokensNotFound {
+    Map<String, String> tokensInfo = oauthService.updateAccessToken(updateData.getFingerprint(), httpServletRequest.getCookies());
+    httpServletResponse.addCookie(cookieProvider.createNewCookie(tokensInfo));
+    return ResponseEntity.ok(new DiscordUserDataSerialize(tokensInfo.get("access_token")));
     }
 
     @GetMapping("/get_csrf")

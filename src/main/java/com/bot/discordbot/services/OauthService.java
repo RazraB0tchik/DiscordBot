@@ -9,6 +9,7 @@ import com.bot.discordbot.exceptions.UserAlreadyExists;
 //import com.bot.discordbot.filters.FilterProvider;
 import com.bot.discordbot.repositories.DiscordTokenRepository;
 import com.bot.discordbot.repositories.UserRepository;
+import com.bot.discordbot.services.utils.CookieProvider;
 import com.bot.discordbot.services.utils.OauthProvider;
 import jakarta.servlet.http.Cookie;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,12 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.Serializable;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Map;
 
 
@@ -39,6 +43,9 @@ public class OauthService {
 
     @Autowired
     DiscordTokenRepository discordTokenRepository;
+
+    @Autowired
+    CookieProvider cookieProvider;
 
     public Map<String, String> generateAllTokens(String code, URL url, Configs oauthDTO, String fingerprint){
 
@@ -80,14 +87,18 @@ public class OauthService {
         return null;
     }
 
-    public void updateAccessToken(String fingerprint, Cookie[] cookies) throws DiscordTokensNotFound {
+    public Map<String, String> updateAccessToken(String fingerprint, Cookie[] cookies) throws DiscordTokensNotFound {
         try {
-
             DiscordTokens discordTokens = oauthProvider.getRefreshToken(cookies);
+
             if(discordTokens != null && discordTokens.getFingerprint().equals(fingerprint)){
-
+                Map<String, String> tokens = discordService.updateAccessToken(discordTokens.getRefreshTokenDiscord());
+                Date generateDate = new Date();
+                oauthProvider.updateUserTokens(tokens, generateDate, discordTokens);
+                return tokens;
             }
-
+            else
+                throw new BadRequest("Cookie or fingerprint damaged");
 
         } catch (BadRequest e) {
             throw new RuntimeException(e);

@@ -41,14 +41,17 @@ export default {
       },
 
      async update_access_token(){
-       await api.get("/auth/update_access",
+       await api.put("/auth/update_access",
            {
                withCredentials: true,
                headers:{
                    "SameSite": "None"
                }
            })
-           .then(response => console.log(response))
+           .then(response => {
+               responseDataFromDiscordCode = response.data;
+               localStorage.access = responseDataFromDiscordCode.access_token;
+           })
      },
 
        async send_code_discord(code, state_user){
@@ -60,7 +63,6 @@ export default {
                   ).then(response => {
                    responseDataFromDiscordCode = response.data;
                    localStorage.access = responseDataFromDiscordCode.access_token;
-                   localStorage.date = responseDataFromDiscordCode.create_date;
                   });
             }
             else

@@ -66,7 +66,7 @@ public class DiscordService {
             httpURLConnection.connect();
 
             if(httpURLConnection.getResponseCode() == HttpURLConnection.HTTP_OK){
-                return oauthProvider.getDataFromResponseApi(httpURLConnection);
+                 return oauthProvider.getDataFromResponseApi(httpURLConnection);
             }
             else {
                 throw new BadRequest("The server cannot process the request, response having status: " + httpURLConnection.getResponseCode());

@@ -11,11 +11,9 @@ import java.util.Date;
 @NoArgsConstructor
 public class DiscordUserDataSerialize {
     private String access_token;
-    private Long create_date;
 
-    public DiscordUserDataSerialize(String access_token, Long create_date) {
+    public DiscordUserDataSerialize(String access_token) {
         this.access_token = access_token;
-        this.create_date = create_date;
     }
 
     @JsonGetter("access_token")
@@ -23,8 +21,4 @@ public class DiscordUserDataSerialize {
         return access_token;
     }
 
-    @JsonGetter("create_date")
-    public Long getCreate_date() {
-        return create_date;
-    }
 }
